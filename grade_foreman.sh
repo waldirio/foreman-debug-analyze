@@ -80,7 +80,7 @@ gradeEnv()
   memTotal=$(cat $XPTO/$dirName/meminfo |grep MemTotal| awk '{print $2}')  
   qtCPU=$(cat $XPTO/$dirName/cpuinfo |grep process| wc -l)  
   cpuModel=$(cat $XPTO/$dirName/cpuinfo |grep "model name"|sort -u|cut -d: -f2|sed -e 's/^ //g')  
-  lineErrorForeman=$(cat $XPTO/$dirName/var/log/foreman/production.log|grep -i error|wc -l)
+  entriesForeman=$(cat $XPTO/$dirName/var/log/foreman/production.log |awk '{print $1, $3}'|grep ^[2] |awk '{print $2}'|sort|uniq -c)
   pingLocalhost=$(cat $XPTO/$dirName/ping_localhost |head -n 4)
   pingHostname=$(cat $XPTO/$dirName/ping_hostname |head -n 4)
   pingHostnameFull=$(cat $XPTO/$dirName/ping_hostname_full |head -n 4)
@@ -93,7 +93,9 @@ gradeEnv()
   echo "Ruby Version ......................: $rubyVersion"
   echo "Memory Size .......................: $memTotal kB"
   echo "CPU Model .........................: $cpuModel" 
-  echo "Error in Foreman log (qt lines)....: $lineErrorForeman" 
+  echo "Entries in Foreman log ............: 
+$entriesForeman" 
+  echo
   echo "Network Interfaces ................:
 $networkInterfaces"
   echo
